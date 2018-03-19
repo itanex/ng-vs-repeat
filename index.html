@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+    <title>Virtual Scroll Experiment</title>
+    <!-- <link href="styles.css" rel="stylesheet"> -->
+</head>
+
+<body ng-controller="AppController as vm">
+    <h1>Virtual Scroll Experiment</h1>
+
+    <div vs-repeat="vm.options">
+        <div ng-repeat="record in vm.records">
+            <!-- content -->
+        </div>
+    </div>
+
+    <script src="node_modules/angular/angular.min.js"></script>
+    <script src="node_modules/angular-vs-repeat/dist/angular-vs-repeat.min.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
