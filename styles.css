@@ -1,0 +1,29 @@
+.wrap-repeater {
+    overflow: auto;
+    border: 1px solid black;
+}
+
+.card {
+    border: 1px solid black;
+    width: 240px;
+    height: 240px;
+    margin: 10px;
+    /* display: inline-block; */
+}
+
+img {
+    width: 100%;
+}
+
+h4 {
+    font-size: 16px
+}
+
+h5 {
+    font-size: 14px;
+}
+
+h4,
+h5 {
+    margin: 0;
+}

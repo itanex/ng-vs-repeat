@@ -1,21 +1,30 @@
 namespace App {
 
     interface vsScrollOptions {
+        // enable debug mode
+        debug?:boolean;
+
         // stack repeated elements horizontally instead of vertically (defaults to false)
         horizontal?: boolean;
         // top/left offset in pixels (defaults to 0)
-        'offset-before'?: number;
+        offsetBefore?: number;
         // bottom/right offset in pixels (defaults to 0)
-        'offset-after'?: number;
+        offsetAfter?: number;
         //  how many pixels ahead should elements be rendered while scrolling (defaults to 0)
-        'scroll-margin'?: number;
+        scrollMargin?: number;
         // if true, elements will be rendered gradually but won't be removed when scrolled away (defaults to false)
         latch?: boolean;
         // an angular expression evaluating to the element's size (in pixels)
         //    - it is possible to use the ngRepeat's local repeaing variable in this expression
         size?: any;
-        // use this attribute without vs-size and without specifying element's size. The automatically computed element style will readjust upon window resize if the size is dependable on the viewport size
+        // use this attribute without vs-size and without specifying element's size. The automatically computed
+        //    element style will re-adjust upon window resize if the size is dependable on the viewport size
         autoresize?: boolean;
+
+        // CSS Selector to get the designated parent element
+        //    (throws exception if parent is not found)
+        scrollParent?: string | Element;
+
         // callback will be called when the first item of the list is rendered
         scrolledToBeginning?: (...args: any[]) => void;
         // set this number to trigger the scrolledToBeginning callback n items before the first gets rendered
@@ -59,7 +68,7 @@ namespace App {
                 BigDataService.ext[Math.floor(Math.random() * BigDataService.ext.length)],
                 this.randomAlpha(),
                 this.randomAlpha()
-            ].join();
+            ].join('');
         }
 
 
@@ -70,25 +79,20 @@ namespace App {
             return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
         }
 
-        public basicRecordSet = function (count: number): Array<Record> {
-            var result = [];
+        private randomRecord(): Record {
+            return new Record(this.randomName(), this.randomTitle(), 'http://via.placeholder.com/240x160');
+        }
 
-            for (var i = 0; i < count; i++) {
-                result.push(new Record(
-                    this.randomName(),
-                    this.randomTitle(),
-                    'http://via.placeholder.com/160x120'
-                ));
-            }
-
-            return result;
+        public basicRecordSet = (count: number): Array<Record> => {
+            var result: Record[] = Array.apply(null, { length: count });
+            return result.map((value, index, array) =>  this.randomRecord());
         }
     }
 
     class AppController {
         public records: Record[];
         public options: vsScrollOptions;
-
+        
         static $inject = [
             'BigDataService'
         ];
@@ -99,16 +103,16 @@ namespace App {
             this.records = BigDataService.basicRecordSet(3245);
 
             this.options = <vsScrollOptions>{
-                "offset-after": 2
+                scrollParent: '.wrap-repeater'
             }
         }
     }
-    angular.noop
+    
     let module = angular.module('app', [
-        'vs-repeat'
+        'vs-repeat',
+        'proto-repeat'
     ]);
 
     module.service('BigDataService', BigDataService);
     module.controller('AppController', AppController);
-
 }

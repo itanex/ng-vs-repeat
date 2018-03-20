@@ -3,21 +3,31 @@
 
 <head>
     <title>Virtual Scroll Experiment</title>
-    <!-- <link href="styles.css" rel="stylesheet"> -->
+    <link href="styles.css" rel="stylesheet">
 </head>
 
 <body ng-controller="AppController as vm">
     <h1>Virtual Scroll Experiment</h1>
 
-    <div vs-repeat="vm.options">
-        <div ng-repeat="record in vm.records">
-            <!-- content -->
+    <div class="wrap-repeater">
+        <div proto-repeat>
+            <div class="card">
+            </div>
         </div>
     </div>
 
     <script src="node_modules/angular/angular.min.js"></script>
-    <script src="node_modules/angular-vs-repeat/dist/angular-vs-repeat.min.js"></script>
+    <script src="node_modules/angular-vs-repeat/dist/angular-vs-repeat.js"></script>
+    <script src="proto.js"></script>
     <script src="app.js"></script>
 </body>
+<!-- <div vs-repeat="vm.options"> -->
+<!-- 
+<div ng-repeat="record in vm.records" class="card">
+    <img ng-src="{{record.image}}">
+    <h4>{{record.name}}</h4>
+    <h5>{{record.title}}</h5>
+</div>
+-->
 
 </html>
