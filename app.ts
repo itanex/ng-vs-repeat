@@ -2,7 +2,7 @@ namespace App {
 
     interface vsScrollOptions {
         // enable debug mode
-        debug?:boolean;
+        debug?: boolean;
 
         // stack repeated elements horizontally instead of vertically (defaults to false)
         horizontal?: boolean;
@@ -39,6 +39,7 @@ namespace App {
     }
 
     class Record {
+        public hide: boolean = false;
         constructor(
             public name: string,
             public title: string,
@@ -85,32 +86,57 @@ namespace App {
 
         public basicRecordSet = (count: number): Array<Record> => {
             var result: Record[] = Array.apply(null, { length: count });
-            return result.map((value, index, array) =>  this.randomRecord());
+            return result.map((value, index, array) => this.randomRecord());
         }
     }
 
     class AppController {
         public records: Record[];
+        //public filtered: Record[];
+        public filter: string = '';
         public options: vsScrollOptions;
-        
+        public displayedRecords: number = 0;
+
         static $inject = [
+            '$scope',
             'BigDataService'
         ];
 
         constructor(
+            private $scope: ng.IScope,
             private BigDataService: BigDataService
         ) {
-            this.records = BigDataService.basicRecordSet(3245);
+            this.$scope.$watch(() => this.filter, () => {
+
+                //this.filtered = this.records.filter((value, index, array) => value.name.indexOf(this.filter) >= 0);
+                
+                if (this.filter) {
+                    this.displayedRecords = 0;
+                    this.records.forEach((value, index, array) => {
+                        value.hide = value.name.toUpperCase().indexOf(this.filter.toUpperCase()) == -1;
+                        if(!value.hide) {
+                            this.displayedRecords++;
+                        }
+                    });
+                } else {
+                    this.displayedRecords = this.records.length;
+                    this.records.forEach((value, index, array) => value.hide = false)
+                }
+            })
+
+            this.records = BigDataService.basicRecordSet(6000);
+            //this.filtered = this.records;
 
             this.options = <vsScrollOptions>{
                 scrollParent: '.wrap-repeater'
             }
         }
     }
-    
+
     let module = angular.module('app', [
         'vs-repeat',
-        'proto-repeat'
+        'proto-repeat',
+        'sf.virtualScroll'
     ]);
 
     module.service('BigDataService', BigDataService);

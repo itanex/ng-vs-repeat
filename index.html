@@ -8,17 +8,38 @@
 
 <body ng-controller="AppController as vm">
     <h1>Virtual Scroll Experiment</h1>
-
-    <div class="wrap-repeater">
+    <input type="text" ng-model="vm.filter" ng-model-options="{ debounce: 200 }">
+    <span>Displayed Records: {{vm.displayedRecords}}</span>
+    <span>Total Records: {{::vm.records.length}}</span>
+    <!-- <div class="wrap-repeater">
         <div proto-repeat>
             <div class="card">
             </div>
+        </div>
+    </div> -->
+
+    <!-- <div class="viewport real">
+        <ul>
+            <li ng-repeat="record in vm.records" class="card">
+                <img ng-src="{{record.image}}">
+                <h4>{{record.name}}</h4>
+                <h5>{{record.title}}</h5>
+            </li>
+        </ul>
+    </div> -->
+
+    <div class="viewport real">
+        <div ng-repeat="record in vm.records" class="card" ng-hide="record.hide">
+            <img ng-src="{{record.image}}">
+            <h4>{{record.name}}</h4>
+            <h5>{{record.title}}</h5>
         </div>
     </div>
 
     <script src="node_modules/angular/angular.min.js"></script>
     <script src="node_modules/angular-vs-repeat/dist/angular-vs-repeat.js"></script>
     <script src="proto.js"></script>
+    <script src="virtual-repeat.js"></script>
     <script src="app.js"></script>
 </body>
 <!-- <div vs-repeat="vm.options"> -->
